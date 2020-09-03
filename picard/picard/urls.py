@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+admin.site.site_header = 'PICARD\'s Admin Panel'
+admin.site.site_title = 'Picard'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/scraper/' , include('apps.news_scraper.urls')),

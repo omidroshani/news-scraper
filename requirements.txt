@@ -2,3 +2,10 @@ Django==3.1.1
 djangorestframework==3.11.1
 Markdown==3.2.2
 django-filter==2.3.0
+newsapi-python==0.2.6
+celery==4.4.7
+django-celery-results==1.2.1
+beautifulsoup4==4.9.1
+selenium==3.141.0
+
+# cd Desktop & cd swen_backend & venv\Scripts\activate & cd swen & celery -A swen worker -l info -P solo

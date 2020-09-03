@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
 LOCAL_APPS = [
     'apps.news_scraper',
     'rest_framework',
+    'django_celery_results',
 ]
 
 INSTALLED_APPS += LOCAL_APPS
@@ -125,3 +127,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+NEWS_API_KEY = "9c5abcb29f1446c581484e4972cb3fd8"
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+BROWSER_DRIVER_EXEC_PATH = os.path.join(BASE_DIR , 'geckodriver')
