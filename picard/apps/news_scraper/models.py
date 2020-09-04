@@ -34,9 +34,9 @@ class Article(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     author = models.CharField(max_length=100,null=True,blank=True)
-    title = models.CharField(max_length=100,null=False,blank=False)
+    title = models.TextField(null=False,blank=False)
     content = models.TextField(null=True,blank=True)
-    url = models.URLField(max_length=200,null=False,blank=False)
+    url = models.URLField(max_length=500,null=False,blank=False)
     images = models.TextField(null=True,blank=True)
     hyperlinks = models.TextField(null=True,blank=True)
 

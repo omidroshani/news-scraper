@@ -56,7 +56,8 @@ def get_latest_news():
                     new_articles_count += 1
             
             total += len(articles)
-        except :
+        except Exception as e :
+            print(e)
             continue
 
     return {'new': new_articles_count, 'total': total}

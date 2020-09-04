@@ -7,5 +7,6 @@ celery==4.4.7
 django-celery-results==1.2.1
 beautifulsoup4==4.9.1
 selenium==3.141.0
+psycopg2==2.8.5
 
 # cd Desktop & cd swen_backend & venv\Scripts\activate & cd swen & celery -A swen worker -l info -P solo

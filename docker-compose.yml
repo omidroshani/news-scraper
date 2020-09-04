@@ -16,16 +16,35 @@ services:
       - RABBITMQ_DEFAULT_PASS=password
     restart: on-failure
 
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=picard
+    networks:
+      - main
+    ports:
+      - "5432:5432"
+    restart: on-failure
+
   app:
     build: .
-    command: sh -c "cd /usr/src/app/picard && python manage.py migrate --no-input && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "wait-for postgres:5432 && cd /usr/src/app/picard && python manage.py migrate --no-input && python manage.py createsuperuser --username admin --email admin@example.com --noinput && python manage.py runserver 0.0.0.0:8000"
     container_name: app
     depends_on:
+      - postgres
       - rabbitmq
     ports:
       - 8000:8000
     hostname: app
     image: app-image
+    environment:
+      - DJANGO_SUPERUSER_PASSWORD=password
     networks:
       - main
     restart: on-failure
@@ -36,6 +55,7 @@ services:
     container_name: celery_worker
     depends_on:
       - app
+      - postgres
       - rabbitmq
     hostname: celery_worker
     image: app-image
@@ -45,3 +65,6 @@ services:
 
 networks:
   main:
+
+volumes:
+  postgres_data:
