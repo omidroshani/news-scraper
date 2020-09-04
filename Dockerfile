@@ -13,9 +13,9 @@ ENV PYTHONUNBUFFERED 1
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 
 
-RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get install -y --no-install-recommends --no-install-suggests \
+RUN apk update \
+ && apk upgrade -y \
+ && apk install -y --no-install-recommends --no-install-suggests \
             ca-certificates \
  && update-ca-certificates \
     \
@@ -23,11 +23,11 @@ RUN apt-get update \
  && toolDeps=" \
         curl bzip2 \
     " \
- && apt-get install -y --no-install-recommends --no-install-suggests \
+ && apk install -y --no-install-recommends --no-install-suggests \
             $toolDeps \
     \
  # Install dependencies for Firefox
- && apt-get install -y --no-install-recommends --no-install-suggests \
+ && apk install -y --no-install-recommends --no-install-suggests \
             `apt-cache depends firefox-esr | awk '/Depends:/{print$2}'` \
     \
  # Download and install Firefox
@@ -44,7 +44,7 @@ RUN apt-get update \
  && mv /tmp/geckodriver /usr/local/bin/ \
     \
  # Cleanup unnecessary stuff
- && apt-get purge -y --auto-remove \
+ && apk purge -y --auto-remove \
                   -o APT::AutoRemove::RecommendsImportant=false \
             $toolDeps \
  && rm -rf /var/lib/apt/lists/* \
