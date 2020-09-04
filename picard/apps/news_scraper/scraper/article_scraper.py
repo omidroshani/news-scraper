@@ -42,8 +42,8 @@ def extract_news_content(pk):
 
             return True
 
-        except:
-
+        except Exception as e :
+            print(e)
             return None
 
     else :
