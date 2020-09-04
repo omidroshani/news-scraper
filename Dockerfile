@@ -12,10 +12,10 @@ ENV PYTHONUNBUFFERED 1
 # install psycopg2 dependencies
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 
-RUN apk update && apk install -y --no-install-recommends ca-certificates curl firefox 
+RUN apk update && apk add ca-certificates curl firefox
 RUN rm -fr /var/lib/apt/lists/*
 RUN curl -L https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz | tar xz -C /usr/local/bin
-RUN apk purge -y ca-certificates curl
+# RUN apk purge -y ca-certificates curl
 
 
 # install dependencies
