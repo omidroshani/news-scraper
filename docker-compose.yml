@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3-management
+    networks:
+      - main
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    restart: on-failure
+
+  app:
+    build: .
+    command: sh -c "cd /usr/src/app/picard && python manage.py migrate --no-input && python manage.py runserver 0.0.0.0:8000"
+    container_name: app
+    depends_on:
+      - rabbitmq
+    ports:
+      - 8000:8000
+    hostname: app
+    image: app-image
+    networks:
+      - main
+    restart: on-failure
+
+
+  celery_worker:
+    command: sh -c "cd /usr/src/app/picard && wait-for rabbitmq:5672 && wait-for app:8000 -- celery -A picard worker -l info -P solo"
+    container_name: celery_worker
+    depends_on:
+      - app
+      - rabbitmq
+    hostname: celery_worker
+    image: app-image
+    networks:
+      - main
+    restart: on-failure
+
+networks:
+  main:

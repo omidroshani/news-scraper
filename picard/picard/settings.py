@@ -131,5 +131,6 @@ STATIC_URL = '/static/'
 NEWS_API_KEY = "9c5abcb29f1446c581484e4972cb3fd8"
 
 CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = 'amqp://user:password@rabbitmq:5672//'
 
 BROWSER_DRIVER_EXEC_PATH = os.path.join(BASE_DIR , 'geckodriver')
