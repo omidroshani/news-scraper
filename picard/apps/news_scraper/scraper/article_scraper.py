@@ -15,7 +15,7 @@ def extract_news_content(pk):
 
             options = Options()
             options.headless = True
-            driver = webdriver.Firefox(options=options, executable_path=settings.BROWSER_DRIVER_EXEC_PATH)
+            driver = webdriver.Firefox(options=options, executable_path="/usr/src/app/picard/geckodriver")
 
             driver.get(f"about:reader?url={article_obj.url}")
             timeout = 10
