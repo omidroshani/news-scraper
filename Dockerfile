@@ -1,5 +1,14 @@
-# pull official base image
-FROM python:3.8.0-alpine
+FROM ubuntu:latest
+
+
+RUN apt-get update \
+  && apt-get install -y python3-pip python3-dev \
+  && cd /usr/local/bin \
+  && ln -s /usr/bin/python3 python \
+  && pip3 install --upgrade pip
+
+ENV TZ=Asia/Tehran
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # set work directory
 RUN mkdir /usr/src/app
@@ -10,30 +19,19 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
-RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
-
-# Get all the prereqs
-RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
-RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk
-RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-bin-2.30-r0.apk
-RUN apk add glibc-2.30-r0.apk
-RUN apk add glibc-bin-2.30-r0.apk
+RUN apt-get update && apt-get install -y libpq-dev
 
 # And of course we need Firefox if we actually want to *use* GeckoDriver
-RUN apk add firefox-esr=60.9.0-r0
+RUN apt-get update && apt-get install -y firefox wget
 
 # Then install GeckoDriver
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz
-RUN tar -zxf geckodriver-v0.26.0-linux64.tar.gz -C /usr/bin
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-linux64.tar.gz
+RUN tar -zxf geckodriver-v0.27.0-linux64.tar.gz -C /usr/bin
 RUN geckodriver --version
-
-
-# install dependencies
-RUN pip install --upgrade pip
 
 # copy project
 COPY . .
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 RUN mv wait-for /bin/wait-for
 RUN chmod +x /bin/wait-for

@@ -39,6 +39,7 @@ def extract_news_content(pk):
             article_obj.status = 'completed'
             article_obj.save()
 
+            driver.quit()
 
             return True
 

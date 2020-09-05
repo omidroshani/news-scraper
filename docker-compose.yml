@@ -34,7 +34,7 @@ services:
 
   app:
     build: .
-    command: sh -c "wait-for postgres:5432 && cd /usr/src/app/picard && python manage.py makemigrations && python manage.py migrate --no-input && python manage.py createsuperuser --username admin --email admin@example.com --noinput && python manage.py runserver 0.0.0.0:8080"
+    command: sh -c "cd /usr/src/app/picard && python manage.py makemigrations && python manage.py migrate --no-input && python manage.py runserver 0.0.0.0:8080"
     container_name: app
     depends_on:
       - postgres
@@ -51,7 +51,7 @@ services:
 
 
   celery_worker:
-    command: sh -c "cd /usr/src/app/picard && wait-for rabbitmq:5672 && wait-for app:8080 -- celery -A picard worker -l info -P solo"
+    command: sh -c "cd /usr/src/app/picard && celery -A picard worker -l info -P solo"
     container_name: celery_worker
     depends_on:
       - app
