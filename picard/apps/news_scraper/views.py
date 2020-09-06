@@ -3,11 +3,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from newsapi import NewsApiClient
 from django.conf import settings
-from .models import Source
+from .models import Source,Article
 from .tasks import get_latest_news as gln
 from .tasks import extract_features as ef
 from django.utils import timezone, dateformat
 from .scraper.article_scraper import extract_news_content
+from django.core.paginator import Paginator
+from .serializers import ArticleSerializer
 
 @api_view(['GET'])
 def update_sources(request):
@@ -40,6 +42,10 @@ def get_feature_extraction(request):
     }})
 
 @api_view(['GET'])
-def update_sources_2(request):
-    res = extract_news_content(1)
-    return Response({'results': res})
+def get_all_articles(request):
+    article_list = Article.objects.all()
+    paginator = Paginator(article_list, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return Response(ArticleSerializer(page_obj, many=True).data)
