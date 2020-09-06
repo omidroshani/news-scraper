@@ -44,6 +44,7 @@ LOCAL_APPS = [
     'apps.news_scraper',
     'rest_framework',
     'django_celery_results',
+    'django_celery_beat',
 ]
 
 INSTALLED_APPS += LOCAL_APPS

@@ -51,7 +51,7 @@ services:
 
 
   celery_worker:
-    command: sh -c "cd /usr/src/app/picard && celery -A picard worker -l info -P solo"
+    command: sh -c "cd /usr/src/app/picard && celery -A picard beat -l info -P solo --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     container_name: celery_worker
     depends_on:
       - app
